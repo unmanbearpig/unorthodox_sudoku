@@ -15,10 +15,15 @@ module Sudoku
       values[x*SIZE + y]
     end
 
-    def row(row_index)
+    def self.row_range(row_index)
       row_start_index = row_index * SIZE
       row_end_index = row_start_index + SIZE - 1
-      values[row_start_index..row_end_index]
+
+      row_start_index..row_end_index
+    end
+
+    def row(row_index)
+      values[self.class.row_range(row_index)]
     end
   end
 end
