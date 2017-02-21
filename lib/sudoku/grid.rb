@@ -1,8 +1,10 @@
-require 'hamster/vector'
 require 'sudoku/coordinates'
 
 module Sudoku
   class Grid
+    SIZE = 9.freeze
+    DIMENSION = (0...SIZE).freeze
+
     class ValueWithCoordinates < Struct.new(:value, :coordinates)
       def to_s
         "<#{value.inspect} at #{coordinates}>"
@@ -12,8 +14,6 @@ module Sudoku
 
     include Enumerable
 
-    SIZE = 9.freeze
-
     attr_reader :values
 
     def initialize(values)
@@ -21,11 +21,11 @@ module Sudoku
         raise ArgumentError.new("Invalid grid size #{values.size}, expected #{SIZE}x#{SIZE} = #{SIZE*SIZE}")
       end
 
-      @values = Hamster::Vector.new(values)
+      @values = values
     end
 
     def set(coordinates, new_value)
-      self.class.new(values.put(coordinates.absolute_index, new_value))
+      self.class.new(values.dup.tap { |v| v[coordinates.absolute_index] = new_value })
     end
 
     def each(&block)
@@ -61,23 +61,23 @@ module Sudoku
     end
 
     def rows
-      (0...SIZE).map { |row_index| row(Coordinates.new(row_index, nil)) }
+      @rows ||= DIMENSION.map { |row_index| values[self.class.row_range(row_index)] }.freeze
     end
 
     def column(coordinates)
-      (0...SIZE).map { |row_index| self[coordinates.row(row_index)] }
+      DIMENSION.map { |row_index| self[coordinates.row(row_index)] }
     end
 
     def columns
-      (0...SIZE).map { |n| column(Coordinates.col(n)) }
+      @columns ||= rows.transpose
     end
 
     def groups
-      (0..2).flat_map do |x|
+      @groups ||= (0..2).flat_map do |x|
         (0..2).map do |y|
           group_by_id(x, y)
         end
-      end
+      end.freeze
     end
 
     def self.row_range(row_index)
@@ -98,8 +98,11 @@ module Sudoku
 
     def group_by_id(x, y)
       rows[self.class.group_index_to_group_range(x)]
-        .map { |row| row[self.class.group_index_to_group_range(y)] }
-        .flatten
+        .flat_map { |row| row[self.class.group_index_to_group_range(y)] }
+    end
+
+    def domains
+      rows + columns + groups
     end
 
     def self.group_index_to_group_range(index)
@@ -118,7 +121,7 @@ module Sudoku
 
     def to_s
       "\n" + '-'*9 + "\n" +
-      rows.map do |row|
+        rows.map do |row|
         row.map(&:to_s).join(" ")
       end.join("\n") + "\n" + '-'*9 + "\n"
 
