@@ -7,6 +7,10 @@ module Sudoku
       @col = col
     end
 
+    def to_a
+      [row, col]
+    end
+
     def absolute_index
       row * SIZE + col
     end
@@ -30,7 +34,6 @@ module Sudoku
         raise ArgumentError.new("Invalid index #{index}, expected 0..8")
       end
     end
-
 
     def ==(other)
       row == other.row && col == other.col
