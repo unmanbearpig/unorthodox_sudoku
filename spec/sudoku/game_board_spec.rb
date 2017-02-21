@@ -53,6 +53,15 @@ module Sudoku
       end
     end
 
+
+    describe "#map" do
+      it "returns a new board with the values modified by the provided function" do
+        result = board.map { |_value| 1 }
+        expect(result).to be_kind_of(GameBoard)
+        expect(result[0, 0]).to eq(1)
+      end
+    end
+
     it "should correctly solve the board" do
       @game = Game.new
       # Each '0' is a blank cell

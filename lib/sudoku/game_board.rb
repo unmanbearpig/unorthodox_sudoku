@@ -7,6 +7,10 @@ module Sudoku
       @values = board_values
     end
 
+    def map(&block)
+      GameBoard.new(*values.map(&block))
+    end
+
     def ==(other)
       values == other.values
     end
