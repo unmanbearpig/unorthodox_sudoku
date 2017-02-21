@@ -30,7 +30,7 @@ module Sudoku
                   0, 8, 3, 6, 9, 7, 5, 4, 2]
 
         board = GameBoard.new(*values)
-        expect(board.possible_values[0, 0]).to eq(Set.new([6, 1]))
+        expect(board.possible_values[Coordinates.new(0, 0)]).to eq(Set.new([6, 1]))
       end
     end
   end

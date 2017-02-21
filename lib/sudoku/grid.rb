@@ -1,3 +1,5 @@
+require 'sudoku/coordinates'
+
 module Sudoku
   class Grid
     include Enumerable
@@ -17,7 +19,7 @@ module Sudoku
     def each(&block)
       new_values = rows.each_with_index.flat_map do |row, row_index|
         row.each_with_index.map do |value, column_index|
-          yield(value, row_index, column_index)
+          yield(value, Coordinates.new(row_index, column_index))
         end
       end
     end
@@ -34,16 +36,16 @@ module Sudoku
       values == other.values
     end
 
-    def [](x, y)
-      values[x*SIZE + y]
+    def [](coordinates)
+      values[coordinates.row * SIZE + coordinates.col]
     end
 
     def rows
-      (0...SIZE).map { |row_index| row(row_index) }
+      (0...SIZE).map { |row_index| row(Coordinates.new(row_index, nil)) }
     end
 
-    def column(column_index)
-      (0...SIZE).map { |row_index| self[row_index, column_index] }
+    def column(coordinates)
+      (0...SIZE).map { |row_index| self[coordinates.row(row_index)] }
     end
 
     def self.row_range(row_index)
@@ -53,14 +55,13 @@ module Sudoku
       row_start_index..row_end_index
     end
 
-    def row(row_index)
-      values[self.class.row_range(row_index)]
+    def row(coordinates)
+      values[self.class.row_range(coordinates.row)]
     end
 
-
-    def group_for(row_index, column_index)
-      rows[self.class.index_to_group_range(row_index)]
-        .map { |row| row[self.class.index_to_group_range(column_index)] }
+    def group_for(coordinates)
+      rows[self.class.index_to_group_range(coordinates.row)]
+        .map { |row| row[self.class.index_to_group_range(coordinates.col)] }
         .flatten
     end
 
