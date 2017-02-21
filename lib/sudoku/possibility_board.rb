@@ -24,9 +24,18 @@ module Sudoku
     end
 
     def unknown_values
-      grid.with_coordinates
-        .reject { |v| v.value.size == 1 }
-        .sort_by { |v| v.value.size }.reverse
+      @unknown_values ||=
+        grid.with_coordinates
+          .reject { |v| v.value.size == 1 }
+          .sort_by! { |v| v.value.size }
+    end
+
+    def most_common_unknown_values
+      @most_common_unknown_values ||=
+        unknown_values.flat_map(&:value).flat_map(&:to_a).sort.reduce(Hash.new(0)) do |acc, value|
+        acc[value] += 1
+        acc
+      end
     end
 
     def solved?
@@ -34,21 +43,24 @@ module Sudoku
     end
 
     def completed?
-      unknown_values.size == 0
+      grid.values.map(&:size).all? { |size| size == 1}
     end
 
     def valid?
-      number_grid = to_board.grid
-      number_grid.rows.all? { |r| r.sort.uniq.count == 9 }
-      number_grid.columns.all? { |r| r.sort.uniq.count == 9 }
-      number_grid.groups.all? { |r| r.sort.uniq.count == 9 }
+      grid.domains.all? { |d| d.reduce(:+).count == 9 }
     end
 
     def best_combinations_to_try
       return nil unless unknown_values.any?
 
       smallest_size = unknown_values.first.value.size
+
       unknown_values.select { |v| v.value.size == smallest_size }
+        .sort_by { |v| v.value.map { |num| most_common_unknown_values[num] } }
+    end
+
+    def best_permutations_to_try
+      @best_permutations_to_try ||= best_combinations_to_try&.permutation
     end
   end
 end
