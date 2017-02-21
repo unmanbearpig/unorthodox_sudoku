@@ -1,3 +1,5 @@
+require 'set'
+
 module Sudoku
   class GameBoard
     SIZE = 9.freeze
@@ -36,8 +38,27 @@ module Sudoku
       values[self.class.row_range(row_index)]
     end
 
+    def rows
+      (0...SIZE).map { |row_index| row(row_index) }
+    end
+
     def column(column_index)
       (0...SIZE).map { |row_index| self[row_index, column_index] }
+    end
+
+    def possible_values
+      all_values = Set.new(1..9)
+
+      map do |value, row_index, column_index|
+        if value == 0
+          row_values = Set.new(row(row_index)) - Set.new([0])
+          column_values = Set.new(column(column_index)) - Set.new([0])
+
+          all_values - row_values - column_values
+        else
+          Set.new([value])
+        end
+      end
     end
   end
 end
