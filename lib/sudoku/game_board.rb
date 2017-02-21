@@ -50,6 +50,32 @@ module Sudoku
       (0...SIZE).map { |row_index| self[row_index, column_index] }
     end
 
+    def group_for(row_index, column_index)
+      rows[self.class.index_to_group_range(row_index)]
+        .map { |row| row[self.class.index_to_group_range(column_index)] }
+        .flatten
+    end
+
+    def self.index_to_group_index(index)
+      if index < 3
+        0
+      elsif index < 6
+        1
+      elsif index < 9
+        2
+      else
+        raise ArgumentError.new("Invalid index #{index}, expected 0..8")
+      end
+    end
+
+    def self.index_to_group_range(index)
+      case index_to_group_index(index)
+      when 0 then 0..2
+      when 1 then 3..5
+      when 2 then 6..8
+      end
+    end
+
     def possible_values
       all_values = Set.new(1..9)
 
@@ -57,8 +83,9 @@ module Sudoku
         if value == 0
           row_values = Set.new(row(row_index)) - Set.new([0])
           column_values = Set.new(column(column_index)) - Set.new([0])
+          group_values = Set.new(group_for(row_index, column_index)) - Set.new([0])
 
-          all_values - row_values - column_values
+          all_values - row_values - column_values - group_values
         else
           Set.new([value])
         end
