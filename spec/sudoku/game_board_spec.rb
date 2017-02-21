@@ -26,7 +26,7 @@ module Sudoku
                                     2, 9, 4, 5, 3, 8, 1, 7, 6,
                                     1, 8, 3, 6, 9, 7, 5, 4, 2
 
-      @game.solve.should == @solved_board
+      expect(@game.solve).to eq(@solved_board)
     end
 
     it "should correctly solve the board" do
@@ -51,7 +51,7 @@ module Sudoku
                                     7, 1, 3, 6, 5, 4, 8, 2, 9,
                                     5, 6, 2, 8, 1, 9, 4, 7, 3
 
-      @game.solve.should == @solved_board
+      expect(@game.solve).to eq(@solved_board)
     end
   end
 end
