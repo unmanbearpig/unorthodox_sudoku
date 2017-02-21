@@ -4,6 +4,26 @@ require 'sudoku/game_board'
 
 module Sudoku
   describe GameBoard do
+    describe "#[]" do
+      it "returns the value of the provided x and y coordinate" do
+        values = [0, 0, 8, 3, 4, 2, 9, 0, 0,
+                  0, 0, 9, 0, 0, 0, 7, 0, 0,
+                  4, 0, 0, 0, 0, 0, 0, 0, 3,
+                  0, 0, 6, 4, 7, 3, 2, 0, 0,
+                  0, 3, 0, 0, 0, 0, 0, 1, 0,
+                  0, 0, 2, 8, 5, 1, 6, 0, 0,
+                  7, 0, 0, 0, 0, 0, 0, 0, 8,
+                  0, 0, 4, 0, 0, 0, 1, 0, 0,
+                  0, 0, 3, 6, 9, 7, 5, 0, 0]
+        board = GameBoard.new(*values)
+
+        expect(board[0, 2]).to eq(8)
+        expect(board[0, 3]).to eq(3)
+        expect(board[6, 0]).to eq(7)
+        expect(board[5, 4]).to eq(5)
+      end
+    end
+
     describe "#==" do
       it "is equal to the board with same values" do
         values = [0, 0, 8, 3, 4, 2, 9, 0, 0,
