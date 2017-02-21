@@ -21,7 +21,7 @@ module Sudoku
         raise ArgumentError.new("Invalid grid size #{values.size}, expected #{SIZE}x#{SIZE} = #{SIZE*SIZE}")
       end
 
-      @values = values
+      @values = values.freeze
     end
 
     def set(coordinates, new_value)

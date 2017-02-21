@@ -8,7 +8,7 @@ module Sudoku
     end
 
     def set(coordinates, new_set_or_value)
-      new_set = new_set_or_value.kind_of?(Set) ? new_set_or_value : Set.new([new_set_or_value])
+      new_set = new_set_or_value.kind_of?(Set) ? new_set_or_value : Set[new_set_or_value]
       self.class.new(grid.set(coordinates, new_set))
     end
 
@@ -43,7 +43,7 @@ module Sudoku
     end
 
     def completed?
-      grid.values.map(&:size).all? { |size| size == 1}
+      grid.values.map(&:size).all? { |size| size == 1 }
     end
 
     def valid?
