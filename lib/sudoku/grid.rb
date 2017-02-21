@@ -84,5 +84,9 @@ module Sudoku
       when 2 then 6..8
       end
     end
+
+    def intersections(coordinates)
+      row(coordinates) + column(coordinates) + group_for(coordinates)
+    end
   end
 end

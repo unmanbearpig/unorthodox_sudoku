@@ -4,6 +4,7 @@ require 'sudoku/grid'
 module Sudoku
   class GameBoard
     SIZE = 9.freeze
+    ALL_CELL_VALUES = Set.new(1..SIZE).freeze
 
     attr_reader :grid
     def initialize(*board_values)
@@ -11,13 +12,7 @@ module Sudoku
     end
 
     def possible_values_for(coordinates)
-      all_values = Set.new(1..9)
-
-      row_values = Set.new(grid.row(coordinates)) - Set.new([0])
-      column_values = Set.new(grid.column(coordinates)) - Set.new([0])
-      group_values = Set.new(grid.group_for(coordinates)) - Set.new([0])
-
-      all_values - row_values - column_values - group_values
+      ALL_CELL_VALUES - Set.new(grid.intersections(coordinates)) - Set.new([0])
     end
 
     def possible_values
