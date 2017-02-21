@@ -11,6 +11,10 @@ module Sudoku
       @grid = Grid.new(board_values)
     end
 
+    def ==(other)
+      grid == other.grid
+    end
+
     def possible_values_for(coordinates)
       ALL_CELL_VALUES - Set.new(grid.intersections(coordinates)) - Set.new([0])
     end
