@@ -19,15 +19,26 @@ module Sudoku
       end
     end
 
+    def occurence_among_unknown_values(value)
+      most_common_unknown_values[value]
+    end
+
+    def size_of_smallest_set_of_unknown_values
+      @size_of_smallest_set_of_unknown_values ||= unknown_values.first.value.size
+    end
+
+    def smallest_set_of_unknown_values
+      @smallest_set_of_unknown_values ||=
+        unknown_values.select { |v| v.value.size == size_of_smallest_set_of_unknown_values }
+    end
+
     def best_combinations_to_try
       return @best_combinations_to_try if @best_combinations_to_try
       return nil unless unknown_values.any?
 
-      smallest_size = unknown_values.first.value.size
-
       @best_combinations_to_try =
-        unknown_values.select { |v| v.value.size == smallest_size }
-          .sort_by { |v| v.value.map { |num| most_common_unknown_values[num] } }
+        smallest_set_of_unknown_values
+          .sort_by { |v| v.value.map(&method(:occurence_among_unknown_values)) }
     end
 
     def best_permutations_to_try
