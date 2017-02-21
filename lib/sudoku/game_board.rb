@@ -8,7 +8,13 @@ module Sudoku
     end
 
     def map(&block)
-      GameBoard.new(*values.map(&block))
+      new_values = rows.each_with_index.flat_map do |row, row_index|
+        row.each_with_index.map do |value, column_index|
+          yield(value, row_index, column_index)
+        end
+      end
+
+      GameBoard.new(*new_values)
     end
 
     def ==(other)
