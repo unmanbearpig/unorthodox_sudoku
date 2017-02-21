@@ -1,3 +1,4 @@
+require 'hamster/vector'
 require 'sudoku/coordinates'
 
 module Sudoku
@@ -20,11 +21,11 @@ module Sudoku
         raise ArgumentError.new("Invalid grid size #{values.size}, expected #{SIZE}x#{SIZE} = #{SIZE*SIZE}")
       end
 
-      @values = values
+      @values = Hamster::Vector.new(values)
     end
 
-    def []=(coordinates, new_value)
-      values[coordinates.row * SIZE + coordinates.col] = new_value
+    def set(coordinates, new_value)
+      self.class.new(values.put(coordinates.absolute_index, new_value))
     end
 
     def each(&block)
@@ -56,7 +57,7 @@ module Sudoku
     end
 
     def [](coordinates)
-      values[coordinates.row * SIZE + coordinates.col]
+      values[coordinates.absolute_index]
     end
 
     def rows
@@ -91,26 +92,14 @@ module Sudoku
     end
 
     def group_for(coordinates)
-      group_by_id(self.class.index_to_group_index(coordinates.row),
-                  self.class.index_to_group_index(coordinates.col))
+      group_by_id(coordinates.group_row,
+                  coordinates.group_col)
     end
 
     def group_by_id(x, y)
       rows[self.class.group_index_to_group_range(x)]
         .map { |row| row[self.class.group_index_to_group_range(y)] }
         .flatten
-    end
-
-    def self.index_to_group_index(index)
-      if index < 3
-        0
-      elsif index < 6
-        1
-      elsif index < 9
-        2
-      else
-        raise ArgumentError.new("Invalid index #{index}, expected 0..8")
-      end
     end
 
     def self.group_index_to_group_range(index)

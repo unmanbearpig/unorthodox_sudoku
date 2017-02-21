@@ -9,10 +9,7 @@ module Sudoku
 
     def set(coordinates, new_set_or_value)
       new_set = new_set_or_value.kind_of?(Set) ? new_set_or_value : Set.new([new_set_or_value])
-      new_grid = grid.dup
-      new_grid[coordinates] = new_set
-
-      self.class.new(new_grid)
+      self.class.new(grid.set(coordinates, new_set))
     end
 
     def to_board

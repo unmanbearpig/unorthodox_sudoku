@@ -1,9 +1,36 @@
 module Sudoku
   class Coordinates
+    SIZE = 9.freeze
+
     def initialize(row, col)
       @row = row
       @col = col
     end
+
+    def absolute_index
+      row * SIZE + col
+    end
+
+    def group_row
+      self.class.index_to_group_index(row)
+    end
+
+    def group_col
+      self.class.index_to_group_index(col)
+    end
+
+    def self.index_to_group_index(index)
+      if index < 3
+        0
+      elsif index < 6
+        1
+      elsif index < 9
+        2
+      else
+        raise ArgumentError.new("Invalid index #{index}, expected 0..8")
+      end
+    end
+
 
     def ==(other)
       row == other.row && col == other.col
