@@ -17,7 +17,7 @@ module Sudoku
     end
     subject(:board) { GameBoard.new(*values) }
 
-    describe "#valid_values" do
+    describe "#possible_values" do
       it "maps each value on the board to a set of possible values in that position" do
         values = [0, 7, 8, 3, 4, 2, 9, 5, 0,
                   3, 2, 9, 1, 8, 5, 7, 6, 4,
