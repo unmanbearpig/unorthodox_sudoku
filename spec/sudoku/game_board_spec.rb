@@ -28,7 +28,8 @@ module Sudoku
 
     describe "#row" do
       it "returns the row by its index" do
-
+        expect(board.row(0)).to eq([0, 0, 8, 3, 4, 2, 9, 0, 0])
+        expect(board.row(6)).to eq([7, 0, 0, 0, 0, 0, 0, 0, 8])
       end
     end
 

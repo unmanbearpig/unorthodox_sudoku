@@ -14,5 +14,11 @@ module Sudoku
     def [](x, y)
       values[x*SIZE + y]
     end
+
+    def row(row_index)
+      row_start_index = row_index * SIZE
+      row_end_index = row_start_index + SIZE - 1
+      values[row_start_index..row_end_index]
+    end
   end
 end
