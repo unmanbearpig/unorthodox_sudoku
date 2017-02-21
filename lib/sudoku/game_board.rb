@@ -25,5 +25,9 @@ module Sudoku
     def row(row_index)
       values[self.class.row_range(row_index)]
     end
+
+    def column(column_index)
+      (0...SIZE).map { |row_index| self[row_index, column_index] }
+    end
   end
 end

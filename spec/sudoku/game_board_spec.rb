@@ -33,6 +33,14 @@ module Sudoku
       end
     end
 
+    describe "#column" do
+      it "returns the column by its index" do
+        expect(board.column(0).count).to eq(9)
+        expect(board.column(0)).to eq([0, 0, 4, 0, 0, 0, 7, 0, 0])
+        expect(board.column(4)).to eq([4, 0, 0, 7, 0, 5, 0, 0, 9])
+      end
+    end
+
     describe "#==" do
       it "is equal to the board with same values" do
         expect(GameBoard.new(*values)).to eq(GameBoard.new(*values))
