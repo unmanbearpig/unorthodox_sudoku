@@ -17,6 +17,14 @@ module Sudoku
     end
     subject(:board) { GameBoard.new(*values) }
 
+    describe ".new" do
+      it "raises error if input size is invalid" do
+        expect do
+          GameBoard.new([1, 2, 3])
+        end.to raise_error(ArgumentError)
+      end
+    end
+
     describe "#[]" do
       it "returns the value of the provided x and y coordinate" do
         expect(board[0, 2]).to eq(8)

@@ -6,6 +6,10 @@ module Sudoku
 
     attr_reader :values
     def initialize(*board_values)
+      if board_values.size != SIZE*SIZE
+        raise ArgumentError.new("Invalid board size #{board_values.size}, expected #{SIZE}x#{SIZE} = #{SIZE*SIZE}")
+      end
+
       @values = board_values
     end
 
