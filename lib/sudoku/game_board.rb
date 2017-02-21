@@ -2,6 +2,8 @@ require 'set'
 
 module Sudoku
   class GameBoard
+    include Enumerable
+
     SIZE = 9.freeze
 
     attr_reader :values
@@ -13,14 +15,20 @@ module Sudoku
       @values = board_values
     end
 
-    def map(&block)
+    def each(&block)
       new_values = rows.each_with_index.flat_map do |row, row_index|
         row.each_with_index.map do |value, column_index|
           yield(value, row_index, column_index)
         end
       end
+    end
 
-      GameBoard.new(*new_values)
+    def map(&block)
+      GameBoard.new(*super(&block))
+    end
+
+    def to_a
+      values.to_a
     end
 
     def ==(other)
