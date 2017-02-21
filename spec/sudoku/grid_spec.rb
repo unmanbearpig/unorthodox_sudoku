@@ -33,10 +33,24 @@ module Sudoku
       end
     end
 
+    describe "#[]=" do
+      it "sets coordinates to the new value" do
+        grid[Coordinates.new(0, 0)] = 9
+        expect(grid[Coordinates.new(0, 0)]).to eq(9)
+      end
+    end
+
     describe "#row" do
       it "returns the row by its index" do
         expect(grid.row(Coordinates.row(0))).to eq([0, 0, 8, 3, 4, 2, 9, 0, 0])
         expect(grid.row(Coordinates.row(6))).to eq([7, 0, 0, 0, 0, 0, 0, 0, 8])
+      end
+    end
+
+    describe "#rows" do
+      it "returns the row by its index" do
+        expect(grid.rows.first).to eq([0, 0, 8, 3, 4, 2, 9, 0, 0])
+        expect(grid.rows.last).to eq([0, 0, 3, 6, 9, 7, 5, 0, 0])
       end
     end
 
@@ -45,6 +59,32 @@ module Sudoku
         expect(grid.column(Coordinates.col(0)).count).to eq(9)
         expect(grid.column(Coordinates.col(0))).to eq([0, 0, 4, 0, 0, 0, 7, 0, 0])
         expect(grid.column(Coordinates.col(4))).to eq([4, 0, 0, 7, 0, 5, 0, 0, 9])
+      end
+    end
+
+    describe "#columns" do
+      it "returns the columns" do
+        expect(grid.columns.first).to eq([0, 0, 4, 0, 0, 0, 7, 0, 0])
+      end
+    end
+
+    describe "#group_by_id" do
+      it "returns the correct group" do
+        expect(grid.group_by_id(0, 0)).to eq([0, 0, 8,
+                                              0, 0, 9,
+                                              4, 0, 0])
+      end
+    end
+
+    describe "#groups" do
+      it "returns 9 elements" do
+        expect(grid.groups.size).to eq(9)
+      end
+
+      it "seems valid" do
+        expect(grid.groups.first).to eq([0, 0, 8,
+                                         0, 0, 9,
+                                         4, 0, 0])
       end
     end
 
@@ -68,11 +108,11 @@ module Sudoku
       end
     end
 
-    describe ".index_to_group_range" do
+    describe ".group_index_to_group_range" do
       it "returns the group range for index" do
-        expect(Grid.index_to_group_range(0)).to eq(0..2)
-        expect(Grid.index_to_group_range(4)).to eq(3..5)
-        expect(Grid.index_to_group_range(8)).to eq(6..8)
+        expect(Grid.group_index_to_group_range(0)).to eq(0..2)
+        expect(Grid.group_index_to_group_range(1)).to eq(3..5)
+        expect(Grid.group_index_to_group_range(2)).to eq(6..8)
       end
     end
 
