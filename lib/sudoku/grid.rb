@@ -113,10 +113,10 @@ module Sudoku
     end
 
     def to_s
-      "\n" + '-'*9 + "\n" +
-        rows.map do |row|
-        row.map(&:to_s).join(" ")
-      end.join("\n") + "\n" + '-'*9 + "\n"
+      "\n------------------\n" +
+        rows.map { |row| row.map(&:inspect).join(" ") }
+          .join("\n") +
+        "\n------------------\n"
 
     end
     alias_method :inspect, :to_s
