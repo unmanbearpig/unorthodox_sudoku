@@ -129,10 +129,10 @@ module Sudoku
       end
     end
 
-    describe "#intersections" do
+    describe "#domains_of" do
       it "returns values from provided row, column and group" do
         coordinates = Coordinates.new(4, 7)
-        expect(grid.intersections(coordinates))
+        expect(grid.domains_of(coordinates))
           .to eq(grid.row(coordinates) + grid.column(coordinates) + grid.group_for(coordinates))
       end
     end
