@@ -108,7 +108,7 @@ module Sudoku
       end
     end
 
-    def intersections(coordinates)
+    def domains_of(coordinates)
       row(coordinates) + column(coordinates) + group_for(coordinates)
     end
 

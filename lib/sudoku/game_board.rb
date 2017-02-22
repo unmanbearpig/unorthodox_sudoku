@@ -16,7 +16,7 @@ module Sudoku
     end
 
     def possible_values_for(coordinates)
-      ALL_CELL_VALUES - Set.new(grid.intersections(coordinates)) - Set.new([0])
+      ALL_CELL_VALUES - Set.new(grid.domains_of(coordinates)) - Set.new([0])
     end
 
     def possible_values
