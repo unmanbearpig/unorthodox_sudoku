@@ -33,10 +33,9 @@ module Sudoku
       end
     end
 
-    describe "#[]=" do
-      it "sets coordinates to the new value" do
-        grid[Coordinates.new(0, 0)] = 9
-        expect(grid[Coordinates.new(0, 0)]).to eq(9)
+    describe "#set" do
+      it "returns a new grid with updated value" do
+        expect(grid.set(Coordinates.new(0, 0), 9)[Coordinates.new(0, 0)]).to eq(9)
       end
     end
 
