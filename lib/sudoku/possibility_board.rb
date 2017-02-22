@@ -49,7 +49,7 @@ module Sudoku
     end
 
     def valid?
-      grid.domains.all? { |d| d.reduce(:+).count == Grid::SIZE }
+      grid.domains.all? { |d| d.reduce(:+) == ALL_CELL_VALUES }
     end
   end
 end
