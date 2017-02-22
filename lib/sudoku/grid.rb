@@ -22,7 +22,7 @@ module Sudoku
     end
 
     def each(&block)
-      new_values = rows.each_with_index.flat_map do |row, row_index|
+      rows.each_with_index.flat_map do |row, row_index|
         row.each_with_index.map do |value, column_index|
           yield(value, Coordinates.new(row_index, column_index))
         end
