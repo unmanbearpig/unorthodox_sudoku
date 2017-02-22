@@ -16,9 +16,9 @@ module Sudoku
 
     def board_permutations
       @board_permutations ||= best_permutations_to_try.lazy.flat_map do |combinations|
-        combinations.flat_map do |possibility_set|
-          coordinates = possibility_set.coordinates
-          possibility_set.map { |value| board.set(coordinates, value) }
+        combinations.flat_map do |cell|
+          coordinates = cell.coordinates
+          cell.map { |value| board.set(coordinates, value) }
         end
       end
     end

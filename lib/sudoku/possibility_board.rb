@@ -1,4 +1,5 @@
 require 'sudoku/game_board'
+require 'sudoku/cell'
 
 module Sudoku
   class PossibilityBoard
@@ -16,9 +17,9 @@ module Sudoku
     def self.possible_values_of(grid)
       grid.map do |value, coordinates|
         if value == 0
-          possible_values_for(grid, coordinates)
+          Cell.new(possible_values_for(grid, coordinates), coordinates)
         else
-          Set.new([value])
+          Cell.new((value), coordinates)
         end
       end
     end
@@ -27,26 +28,16 @@ module Sudoku
       new(possible_values_of(board.grid))
     end
 
-    def set(coordinates, new_set_or_value)
-      new_set = new_set_or_value.kind_of?(Set) ? new_set_or_value : Set[new_set_or_value]
-      self.class.new(grid.set(coordinates, new_set))
+    def set(coordinates, new_value)
+      self.class.new(grid.set(coordinates, Cell.new(new_value, coordinates)))
     end
 
     def to_board
-      values = grid.values.map do |set, coordinates|
-        if set.size == 1
-          set.first
-        else
-          0
-        end
-      end.to_a
-      GameBoard.new(*values)
+      GameBoard.new(*grid.values.map(&:to_i))
     end
 
     def unknown_values
-      @unknown_values ||=
-        grid.with_coordinates
-          .reject { |v| v.value.size == 1 }
+      @unknown_values ||= grid.values.reject(&:known?)
     end
 
     def solved?
@@ -54,11 +45,11 @@ module Sudoku
     end
 
     def completed?
-      grid.values.map(&:size).all? { |size| size == 1 }
+      grid.values.all?(&:known?)
     end
 
     def valid?
-      grid.domains.all? { |d| d.reduce(:+).count == 9 }
+      grid.domains.all? { |d| d.reduce(:+).count == Grid::SIZE }
     end
   end
 end
