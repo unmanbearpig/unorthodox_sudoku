@@ -15,12 +15,10 @@ module Sudoku
                             7, 1, 3, 6, 5, 4, 8, 2, 9,
                             5, 6, 2, 8, 1, 9, 4, 7, 3)
 
-      pboard = PossibilityBoard.new(board.possible_values)
+      pboard = PossibilityBoard.from_game_board(board)
 
       expect(pboard.unknown_values.size).to eq(1)
       expect(pboard.unknown_values.first.value).to eq(Set.new([1, 2]))
-      expect(pboard.best_to_try.value).to eq(Set.new([1, 2]))
-      expect(pboard.best_to_try.coordinates).to eq(Coordinates.new(0, 0))
       expect(pboard.solved?).to be_falsy
     end
 
@@ -35,7 +33,7 @@ module Sudoku
                             7, 1, 3, 6, 5, 4, 8, 2, 9,
                             5, 6, 2, 8, 1, 9, 4, 7, 3)
 
-      pboard = PossibilityBoard.new(board.possible_values)
+      pboard = PossibilityBoard.from_game_board(board)
 
       expect(pboard.valid?).to be_falsy
       expect(pboard.solved?).to be_falsy
