@@ -66,7 +66,17 @@ module Sudoku
     alias_method :inspect, :to_s
   end
 
-  class ValueWithCoordinates < Struct.new(:value, :coordinates)
+  class ValueWithCoordinates < Delegator
+    attr_reader :value, :coordinates
+    def initialize(value, coordinates)
+      @value = value
+      @coordinates = coordinates
+    end
+
+    def __getobj__
+      value
+    end
+
     def to_s
       "<#{value.inspect} at #{coordinates}>"
     end
