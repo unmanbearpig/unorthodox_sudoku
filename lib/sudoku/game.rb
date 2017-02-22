@@ -9,7 +9,7 @@ module Sudoku
     end
 
     def strategy
-      DefaultSolvingStrategy.new(PossibilityBoard.new(@board.possible_values))
+      DefaultSolvingStrategy.new(PossibilityBoard.from_game_board(@board))
     end
 
     def solve

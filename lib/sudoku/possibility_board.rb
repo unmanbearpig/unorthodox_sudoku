@@ -2,9 +2,29 @@ require 'sudoku/game_board'
 
 module Sudoku
   class PossibilityBoard
+    ALL_CELL_VALUES = Set.new(1..Grid::SIZE).freeze
+
     attr_reader :grid
     def initialize(grid_of_possibilities)
       @grid = grid_of_possibilities
+    end
+
+    def self.possible_values_for(grid, coordinates)
+      ALL_CELL_VALUES - Set.new(grid.domains_of(coordinates)) - Set.new([0])
+    end
+
+    def self.possible_values_of(grid)
+      grid.map do |value, coordinates|
+        if value == 0
+          possible_values_for(grid, coordinates)
+        else
+          Set.new([value])
+        end
+      end
+    end
+
+    def self.from_game_board(board)
+      new(possible_values_of(board.grid))
     end
 
     def set(coordinates, new_set_or_value)
