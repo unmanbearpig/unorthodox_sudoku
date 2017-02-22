@@ -19,7 +19,7 @@ module Sudoku
         if value == 0
           Cell.new(possible_values_for(grid, coordinates), coordinates)
         else
-          Cell.new((value), coordinates)
+          Cell.new(value, coordinates)
         end
       end
     end
