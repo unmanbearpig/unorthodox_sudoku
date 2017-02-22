@@ -5,13 +5,6 @@ module Sudoku
     SIZE = 9.freeze
     DIMENSION = (0...SIZE).freeze
 
-    class ValueWithCoordinates < Struct.new(:value, :coordinates)
-      def to_s
-        "<#{value.inspect} at #{coordinates}>"
-      end
-      alias_method :inspect, :to_s
-    end
-
     include Enumerable
 
     attr_reader :values
